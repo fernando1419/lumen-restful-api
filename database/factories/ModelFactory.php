@@ -29,6 +29,6 @@ $factory->define(App\Author::class, function ($faker) {
         'twitter'                => $faker->url,
         'location'               => $faker->address,
         'last_article_published' => $faker->sentence,
-        'active'                 => $faker->boolean()
+        'some_boolean'           => $faker->boolean()
     ];
 });
