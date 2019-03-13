@@ -21,6 +21,7 @@ class CreateAuthorsTable extends Migration
             $table->string('twitter');
             $table->string('location');
             $table->string('last_article_published');
+            $table->boolean('active');
             $table->timestamps();
         });
     }

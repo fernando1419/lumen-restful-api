@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthorsController;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -16,11 +18,17 @@ $router->get('/key', function () {
 });
 
 $router->get('/', function () use ($router) {
-    /* 
-    Get all authors - GET /api/authors
-    Get one author - GET /api/authors/23
-    Create an author - POST /api/authors 
-    Edit an author - PUT /api/authors/23
-    Delete an author - DELETE /api/authors/23
-    */
+    return 'Home Page!';
 });
+
+$router->group(['prefix' => '/api'], function() use ($router) {
+    $router->get('/authors', 'AuthorsController@index'); // GET /api/authors (all authors)
+    
+});
+
+/* 
+Get one author - GET /api/authors/23
+Create an author - POST /api/authors 
+Edit an author - PUT /api/authors/23
+Delete an author - DELETE /api/authors/23
+*/

@@ -23,11 +23,12 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
  */
 $factory->define(App\Author::class, function ($faker) {
     return [
-        'name'  => $faker->name,
-        'email' => $faker->email,
-        'github' => $faker->url,
-        'twitter' => $faker->url,
-        'location' => $faker->address,
-        'last_article_published' => $faker->sentence
+        'name'                   => $faker->name,
+        'email'                  => $faker->email,
+        'github'                 => $faker->url,
+        'twitter'                => $faker->url,
+        'location'               => $faker->address,
+        'last_article_published' => $faker->sentence,
+        'active'                 => $faker->boolean()
     ];
 });
