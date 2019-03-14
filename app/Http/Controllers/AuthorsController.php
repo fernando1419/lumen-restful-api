@@ -3,46 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Author;
+use App\ApiProject\Transformers\AuthorTransformer;
 
 class AuthorsController extends Controller
 {
+
+    /**
+     *
+     * @var ApiProject\Transformer\AuthorTransformer
+     */
+    protected $authorTransformer;
+
+    /**
+     * __construct
+     *
+     * @param ApiProject\Transformer\AuthorTransformer $authorTransformer
+     * @return void
+     */
+    public function __construct(AuthorTransformer $authorTransformer)
+    {
+        $this->authorTransformer = $authorTransformer;
+    }
+
+    /**
+     * View all authors.
+     *
+     * @return void
+     */
     public function index()
     {
         $authors = Author::all();
-     
+        
         return response()->json([
-            'data' => $this->transformCollection($authors) 
+            'data' => $this->authorTransformer->transformCollection($authors->toArray())
         ], 200);
-    }
-
-    /**
-     * transformCollection
-     *
-     * @param mixed $authors
-     * @return void
-     */
-    private function transformCollection($authors)
-    {        
-        return array_map([$this, 'transform'], $authors->toArray());
-    }
-
-    /**
-     * transform
-     *
-     * @param mixed $author
-     * @return void
-     */
-    private function transform($author)
-    {
-        // The apis will work on the keys rather than the name of the fields in authors DB table, that is why tranform is necessary.
-        return [
-            'name'         => $author['name'],
-            'email'        => $author['email'],
-            'github'       => $author['github'],
-            'twitter'      => $author['twitter'],
-            'last_article' => $author['last_article_published'],
-            'active'       => (boolean) $author['some_boolean']
-        ]; 
     }
 
 }
