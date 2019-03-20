@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers;
 
 use App\Author;
 use App\ApiProject\Transformers\AuthorTransformer;

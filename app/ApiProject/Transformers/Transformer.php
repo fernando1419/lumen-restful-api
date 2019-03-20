@@ -1,6 +1,4 @@
-<?php
-
-namespace App\ApiProject\Transformers;
+<?php namespace App\ApiProject\Transformers;
 
 abstract class Transformer
 {
