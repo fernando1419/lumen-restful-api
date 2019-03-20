@@ -3,9 +3,8 @@
 use App\Author;
 use App\ApiProject\Transformers\AuthorTransformer;
 
-class AuthorsController extends Controller
+class AuthorsController extends ApiController
 {
-
     /**
      *
      * @var ApiProject\Transformer\AuthorTransformer
@@ -32,9 +31,9 @@ class AuthorsController extends Controller
     {
         $authors = Author::all();
         
-        return response()->json([
+        return $this->respond([
             'data' => $this->authorTransformer->transformCollection($authors->toArray())
-        ], 200);
+        ]); // 200 is the default statusCode that is why I omitted it.
     }
 
 }
