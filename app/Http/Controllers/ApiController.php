@@ -41,6 +41,17 @@ class ApiController extends BaseController
     {
         return $this->setStatusCode(404)->respondWithError($message);
     }
+    
+    /**
+     * respondInternalError
+     *
+     * @param mixed $message
+     * @return void
+     */
+    public function respondInternalError($message = 'Internal Error!')
+    {
+        return $this->setStatusCode(500)->respondWithError($message);
+    }
 
     /**
      * respondWithError
