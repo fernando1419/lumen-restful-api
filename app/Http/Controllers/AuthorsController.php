@@ -30,10 +30,31 @@ class AuthorsController extends ApiController
     public function index()
     {
         $authors = Author::all();
-        
+
         return $this->respond([
             'data' => $this->authorTransformer->transformCollection($authors->toArray())
         ]); // 200 is the default statusCode that is why I omitted it.
     }
+
+    /**
+     * show
+     *
+     * @param Author $id
+     * @return void
+     */
+    public function show($id)
+    {
+        $author = Author::find($id);
+
+        if (! $author)
+        {
+            return $this->respondNotFound('Author does not exist.');
+        }
+
+        return $this->respond([
+            'data' => $this->authorTransformer->transform($author)
+        ]);
+    }
+
 
 }

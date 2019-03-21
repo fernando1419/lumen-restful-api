@@ -17,7 +17,7 @@ class AuthorTransformer extends Transformer
             'github'       => $author['github'],
             'twitter'      => $author['twitter'],
             'last_article' => $author['last_article_published'],
-            'active'       => (boolean)$author['some_boolean']
+            'active'       => (boolean) $author['some_boolean']
         ];
     }
 
