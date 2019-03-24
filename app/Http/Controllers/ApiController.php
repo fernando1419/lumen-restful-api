@@ -32,6 +32,30 @@ class ApiController extends BaseController
     }
 
     /**
+     * respondCreated
+     *
+     * @param $message
+     * @return void
+     */
+    public function respondCreated($message)
+    {
+        return $this->setStatusCode(201)->respond([
+            'message' => $message
+        ]);    
+    }
+
+    /**
+     * respondUnprocessableEntity
+     *
+     * @param mixed $message
+     * @return void
+     */
+    public function respondUnprocessableEntity($message)
+    {
+        return $this->setStatusCode(422)->respondWithError($message);    
+    }
+    
+    /**
      * respondNotFound
      *
      * @param mixed $message

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAuthorsTable extends Migration
 {
@@ -17,11 +17,11 @@ class CreateAuthorsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email');
-            $table->string('github');
-            $table->string('twitter');
-            $table->string('location');
-            $table->string('last_article_published');
-            $table->boolean('some_boolean');
+            $table->string('github')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('location')->nullable();
+            $table->string('last_article_published')->nullable();
+            $table->boolean('some_boolean')->default(false);
             $table->timestamps();
         });
     }

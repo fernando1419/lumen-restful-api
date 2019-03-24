@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use App\Author;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\ApiProject\Transformers\AuthorTransformer;
 
 class AuthorsController extends ApiController
@@ -46,7 +48,7 @@ class AuthorsController extends ApiController
     {
         $author = Author::find($id);
 
-        if (! $author)
+        if ( ! $author )
         {
             return $this->respondNotFound('Author does not exist.');
         }
@@ -56,5 +58,23 @@ class AuthorsController extends ApiController
         ]);
     }
 
+    /**
+     * store an Author
+     *
+     * @return void
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), Author::$rules); // $request->input('email');
+
+        if ( $validator->fails() )
+        {
+            return $this->respondUnprocessableEntity($validator->errors());
+        }
+
+        Author::create($request->all());
+
+        return $this->respondCreated( 'Author successfully created.');
+    }
 
 }

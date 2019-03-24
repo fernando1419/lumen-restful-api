@@ -17,5 +17,15 @@ class Author extends Model {
      * @var array
      */
     protected $hidden = [];
-    
+
+    /**
+     * Validation rules for Author Model.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name' => 'required',
+        'email' => 'required|email'
+    ];
+
 }
