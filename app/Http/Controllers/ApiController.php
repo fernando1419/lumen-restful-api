@@ -2,6 +2,8 @@
 
 use Laravel\Lumen\Routing\Controller as BaseController;
 
+use Symfony\Component\HttpFoundation\Response;
+
 class ApiController extends BaseController
 {
     /**
@@ -9,8 +11,8 @@ class ApiController extends BaseController
      *
      * @var integer
      */
-    protected $statusCode = 200;
-
+    protected $statusCode = Response::HTTP_OK;
+    
     /**
      * Get the value of statusCode
      */ 
@@ -39,7 +41,7 @@ class ApiController extends BaseController
      */
     public function respondCreated($message)
     {
-        return $this->setStatusCode(201)->respond([
+        return $this->setStatusCode(Response::HTTP_CREATED)->respond([
             'message' => $message
         ]);    
     }
@@ -52,7 +54,7 @@ class ApiController extends BaseController
      */
     public function respondUnprocessableEntity($message)
     {
-        return $this->setStatusCode(422)->respondWithError($message);    
+        return $this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->respondWithError($message);    
     }
     
     /**
@@ -63,7 +65,7 @@ class ApiController extends BaseController
      */
     public function respondNotFound($message = 'Not found!')
     {
-        return $this->setStatusCode(404)->respondWithError($message);
+        return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
     }
     
     /**
@@ -74,7 +76,7 @@ class ApiController extends BaseController
      */
     public function respondInternalError($message = 'Internal Error!')
     {
-        return $this->setStatusCode(500)->respondWithError($message);
+        return $this->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)->respondWithError($message);
     }
 
     /**

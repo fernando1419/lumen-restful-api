@@ -74,7 +74,7 @@ class AuthorsController extends ApiController
 
         Author::create($request->all());
 
-        return $this->respondCreated( 'Author successfully created.');
+        return $this->respondCreated('Author successfully created.');
     }
 
 }
