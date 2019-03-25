@@ -21,7 +21,7 @@ class CreateAuthorsTable extends Migration
             $table->string('twitter')->nullable();
             $table->string('location')->nullable();
             $table->string('last_article_published')->nullable();
-            $table->boolean('some_boolean')->default(false);
+            $table->boolean('some_boolean')->nullable()->default(false);
             $table->timestamps();
         });
     }

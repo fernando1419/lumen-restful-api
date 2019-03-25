@@ -16,6 +16,7 @@ class AuthorTransformer extends Transformer
             'email'        => $author['email'],
             'github'       => $author['github'],
             'twitter'      => $author['twitter'],
+            'location'     => $author['location'],
             'last_article' => $author['last_article_published'],
             'active'       => (boolean) $author['some_boolean']
         ];

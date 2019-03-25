@@ -72,9 +72,29 @@ class AuthorsController extends ApiController
             return $this->respondUnprocessableEntity($validator->errors());
         }
 
-        Author::create($request->all());
-
+        $this->createAuthor($request);
+        
         return $this->respondCreated('Author successfully created.');
     }
+
+    /**
+     * createAuthor
+     *
+     * @param Request $request
+     * @return void
+     */
+    private function createAuthor(Request $request)
+    {
+        $author = new Author();
+        $author->name                   = $request->get('name');
+        $author->email                  = $request->get('email');
+        $author->github                 = $request->get('github');
+        $author->twitter                = $request->get('twitter');
+        $author->location               = $request->get('location');
+        $author->last_article_published = $request->get('last_article');
+        $author->some_boolean           = filter_var($request->get('active'), FILTER_VALIDATE_BOOLEAN);
+        $author->save();
+    }
+    
 
 }
