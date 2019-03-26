@@ -5,7 +5,7 @@ class AuthorTransformer extends Transformer
     /**
      * transform
      *
-     * @param mixed $author
+     * @param Author $author
      * @return void
      */
     public function transform($author)

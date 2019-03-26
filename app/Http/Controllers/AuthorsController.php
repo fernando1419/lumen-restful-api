@@ -85,16 +85,15 @@ class AuthorsController extends ApiController
      */
     private function createAuthor(Request $request)
     {
-        $author = new Author();
-        $author->name                   = $request->get('name');
-        $author->email                  = $request->get('email');
-        $author->github                 = $request->get('github');
-        $author->twitter                = $request->get('twitter');
-        $author->location               = $request->get('location');
-        $author->last_article_published = $request->get('last_article');
-        $author->some_boolean           = filter_var($request->get('active'), FILTER_VALIDATE_BOOLEAN);
-        $author->save();
+        return Author::create([
+            'name'                   => $request->get('name'),
+            'email'                  => $request->get('email'),
+            'github'                 => $request->get('github'),
+            'twitter'                => $request->get('twitter'),
+            'location'               => $request->get('location'),
+            'last_article_published' => $request->get('last_article'),
+            'some_boolean'           => filter_var($request->get('active'), FILTER_VALIDATE_BOOLEAN)
+        ]);
     }
-    
 
 }
