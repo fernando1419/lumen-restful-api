@@ -22,6 +22,7 @@ class AuthorsController extends ApiController
     public function __construct(AuthorTransformer $authorTransformer)
     {
         $this->authorTransformer = $authorTransformer;
+        $this->middleware('auth');  //, ['only' => ['store', 'update', 'delete']]);
     }
 
     /**
@@ -65,8 +66,8 @@ class AuthorsController extends ApiController
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), Author::$rules); // $request->input('email');
-
+        $validator = Validator::make($request->all(), Author::$rules);
+        
         if ( $validator->fails() )
         {
             return $this->respondUnprocessableEntity($validator->errors());

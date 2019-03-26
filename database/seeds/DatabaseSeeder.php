@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use App\Author;
 use Illuminate\Database\Seeder;
 
@@ -13,11 +14,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Author::unguard();
+        User::unguard();
         
         Author::truncate();
+        User::truncate();
         $this->call(AuthorsTableSeeder::class);
-        // $this->call(UsersTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
 
         Author::reguard();
+        User::reguard();
     }
 }
