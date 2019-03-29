@@ -22,7 +22,7 @@ class AuthorsController extends ApiController
     public function __construct(AuthorTransformer $authorTransformer)
     {
         $this->authorTransformer = $authorTransformer;
-        $this->middleware('auth');  //, ['only' => ['store', 'update', 'delete']]);
+        $this->middleware('auth', ['only' => ['store', 'update', 'delete']]);
     }
 
     /**

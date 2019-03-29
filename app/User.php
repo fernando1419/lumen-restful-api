@@ -27,4 +27,29 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * authenticateByEmailAndPassword
+     *
+     * @param string $email
+     * @param string $password
+     * @return Instance of User or null. 
+     */
+    public static function authenticateByEmailAndPassword($email, $password)
+    {
+        $user = self::whereEmail($email)->first();
+        
+        if (! $user) 
+        {
+            return null;
+        } 
+        
+        if (! app()->make('hash')->check($password, $user->password))
+        {
+            return null;
+        }
+        
+        return $user;
+    }
+    
 }

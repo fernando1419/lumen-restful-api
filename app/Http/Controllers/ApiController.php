@@ -11,7 +11,7 @@ class ApiController extends BaseController
      *
      * @var integer
      */
-    protected $statusCode = Response::HTTP_OK;
+    protected $statusCode = Response::HTTP_OK; // 200
     
     /**
      * Get the value of statusCode
@@ -34,7 +34,7 @@ class ApiController extends BaseController
     }
 
     /**
-     * respondCreated
+     * respondCreated (201)
      *
      * @param $message
      * @return void
@@ -47,7 +47,29 @@ class ApiController extends BaseController
     }
 
     /**
-     * respondUnprocessableEntity
+     * respondUnauthorized (401)
+     *
+     * @param mixed $message
+     * @return void
+     */
+    public function respondUnauthorized($message = 'Unauthorized, check your credentials!.')
+    {
+        return $this->setStatusCode(Response::HTTP_UNAUTHORIZED)->respondWithError($message);
+    }
+    
+    /**
+     * respondNotFound (404)
+     *
+     * @param mixed $message
+     * @return void
+     */
+    public function respondNotFound($message = 'Not found!')
+    {
+        return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
+    }
+
+    /**
+     * respondUnprocessableEntity (422)
      *
      * @param mixed $message
      * @return void
@@ -58,18 +80,7 @@ class ApiController extends BaseController
     }
     
     /**
-     * respondNotFound
-     *
-     * @param mixed $message
-     * @return void
-     */
-    public function respondNotFound($message = 'Not found!')
-    {
-        return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
-    }
-    
-    /**
-     * respondInternalError
+     * respondInternalError (500)
      *
      * @param mixed $message
      * @return void
