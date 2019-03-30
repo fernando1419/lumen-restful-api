@@ -35,6 +35,7 @@ class AuthorsController extends ApiController
         $authors = Author::all();
 
         return $this->respond([
+            'message' => 'Displays all authors.',
             'data' => $this->authorTransformer->transformCollection($authors->toArray())
         ]); // 200 is the default statusCode that is why I omitted it.
     }
@@ -47,7 +48,11 @@ class AuthorsController extends ApiController
      */
     public function show($authorId)
     {
-        $author = $this->getAuthorById($authorId);
+        $author = Author::find($authorId);
+
+        if (! $author) {
+            return $this->respondNotFound('Author does not exist.');
+        }
 
         return $this->respond([
             'data'    => $this->authorTransformer->transform($author),
@@ -86,7 +91,11 @@ class AuthorsController extends ApiController
      */
     public function update(Request $request, $authorId)
     {
-        $author = $this->getAuthorById($authorId);
+        $author = Author::find($authorId);
+
+        if (! $author) {
+            return $this->respondNotFound('Author does not exist.');
+        }
 
         $validator = Validator::make($request->all(), Author::$rules);
 
@@ -104,23 +113,26 @@ class AuthorsController extends ApiController
     }
 
     /**
-     * getAuthor
+     * destroy
      *
-     * @param integer $authorId
-     * @return Author or Json Response if not found.
+     * @param mixed $authorId
+     * @return void
      */
-    private function getAuthorById($authorId)
+    public function destroy($authorId)
     {
         $author = Author::find($authorId);
 
         if (! $author) {
-                return $this->respondNotFound('Author does not exist.');
+            return $this->respondNotFound('Author does not exist.');
         }
+        
+        $author->delete();
 
-        return $author;
+        return $this->respond([
+            'message' => "Author ID: {$authorId} successfully deleted!."
+        ]);
     }
-
-
+    
     /**
      * createAuthor
      *
@@ -159,6 +171,5 @@ class AuthorsController extends ApiController
 
         return $author->save();
     }
-
-
+    
 }
