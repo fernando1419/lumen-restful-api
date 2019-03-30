@@ -45,17 +45,13 @@ class AuthorsController extends ApiController
      * @param Author $id
      * @return void
      */
-    public function show($id)
+    public function show($authorId)
     {
-        $author = Author::find($id);
-
-        if ( ! $author )
-        {
-            return $this->respondNotFound('Author does not exist.');
-        }
+        $author = $this->getAuthorById($authorId);
 
         return $this->respond([
-            'data' => $this->authorTransformer->transform($author)
+            'data'    => $this->authorTransformer->transform($author),
+            'message' => "Information about Author ID: {$authorId}."
         ]);
     }
 
@@ -67,16 +63,63 @@ class AuthorsController extends ApiController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), Author::$rules);
-        
-        if ( $validator->fails() )
+
+        if ($validator->fails())
         {
             return $this->respondUnprocessableEntity($validator->errors());
         }
 
-        $this->createAuthor($request);
-        
-        return $this->respondCreated('Author successfully created.');
+        $author = $this->createAuthor($request);
+
+        return $this->setStatusCode(201)->respond([
+            'data'    => $this->authorTransformer->transform($author),
+            'message' => "Author ID: {$author->id} successfully created.!"
+        ]);
     }
+
+    /**
+     * update
+     *
+     * @param Request $request
+     * @param mixed $id
+     * @return void
+     */
+    public function update(Request $request, $authorId)
+    {
+        $author = $this->getAuthorById($authorId);
+
+        $validator = Validator::make($request->all(), Author::$rules);
+
+        if ($validator->fails())
+        {
+            return $this->respondUnprocessableEntity($validator->errors());
+        }
+
+        $this->updateAuthor($request, $author);
+
+        return $this->respond([
+            'data'    =>  $this->authorTransformer->transform($author),
+            'message' => "Author ID: {$authorId} successfully updated!."
+        ]);
+    }
+
+    /**
+     * getAuthor
+     *
+     * @param integer $authorId
+     * @return Author or Json Response if not found.
+     */
+    private function getAuthorById($authorId)
+    {
+        $author = Author::find($authorId);
+
+        if (! $author) {
+                return $this->respondNotFound('Author does not exist.');
+        }
+
+        return $author;
+    }
+
 
     /**
      * createAuthor
@@ -96,5 +139,26 @@ class AuthorsController extends ApiController
             'some_boolean'           => filter_var($request->get('active'), FILTER_VALIDATE_BOOLEAN)
         ]);
     }
+
+    /**
+     * updateAuthor
+     *
+     * @param Request $request
+     * @param Author $author
+     * @return void
+     */
+    private function updateAuthor(Request $request, Author $author)
+    {
+        $author->name                   = $request->get('name');
+        $author->email                  = $request->get('email');
+        $author->github                 = $request->get('github');
+        $author->twitter                = $request->get('twitter');
+        $author->location               = $request->get('location');
+        $author->last_article_published = $request->get('last_article');
+        $author->some_boolean           = filter_var($request->get('active'), FILTER_VALIDATE_BOOLEAN);
+
+        return $author->save();
+    }
+
 
 }

@@ -25,7 +25,7 @@ class Author extends Model {
      */
     public static $rules = [
         'name' => 'required',
-        'email' => 'required|email'
+        'email' => 'bail|required|email'
     ];
 
 }

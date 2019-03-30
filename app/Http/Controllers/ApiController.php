@@ -34,19 +34,6 @@ class ApiController extends BaseController
     }
 
     /**
-     * respondCreated (201)
-     *
-     * @param $message
-     * @return void
-     */
-    public function respondCreated($message)
-    {
-        return $this->setStatusCode(Response::HTTP_CREATED)->respond([
-            'message' => $message
-        ]);    
-    }
-
-    /**
      * respondUnauthorized (401)
      *
      * @param mixed $message
