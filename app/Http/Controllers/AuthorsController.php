@@ -22,7 +22,8 @@ class AuthorsController extends ApiController
     public function __construct(AuthorTransformer $authorTransformer)
     {
         $this->authorTransformer = $authorTransformer;
-        $this->middleware('auth', ['only' => ['store', 'update', 'delete']]);
+        $this->middleware('auth', ['only' => ['store', 'update', 'destroy']]);
+        $this->middleware('check-param', ['only' => ['show', 'update', 'destroy']]);
     }
 
     /**
@@ -125,14 +126,14 @@ class AuthorsController extends ApiController
         if (! $author) {
             return $this->respondNotFound('Author does not exist.');
         }
-        
+
         $author->delete();
 
         return $this->respond([
             'message' => "Author ID: {$authorId} successfully deleted!."
         ]);
     }
-    
+
     /**
      * createAuthor
      *
@@ -171,5 +172,5 @@ class AuthorsController extends ApiController
 
         return $author->save();
     }
-    
+
 }

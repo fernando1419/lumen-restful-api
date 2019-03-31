@@ -34,6 +34,18 @@ class ApiController extends BaseController
     }
 
     /**
+     * respondBadRequest
+     *
+     * @param mixed $message
+     * @param mixed check
+     * @return void
+     */
+    public function respondBadRequest($message = 'Bad input parameter, check your parameters values.')
+    {
+        return $this->setStatusCode(Response::HTTP_BAD_REQUEST)->respondWithError($message);
+    }
+
+    /**
      * respondUnauthorized (401)
      *
      * @param mixed $message
