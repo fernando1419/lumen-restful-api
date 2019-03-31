@@ -88,8 +88,9 @@ class ApiController extends BaseController
     {
         return $this->respond([
             'error' => [
-                'message' => $message,
-                'status_code' => $this->getStatusCode()
+                'message'     => $message,
+                'status_code' => $this->getStatusCode(),
+                'url'         => \URL::current()
             ]
         ]); 
     }
