@@ -29,6 +29,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     /**
+     * Validation rules for User Model.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'email' => 'required|email',
+        'password' => 'required'
+    ];
+
+    /**
      * authenticateByEmailAndPassword
      *
      * @param string $email

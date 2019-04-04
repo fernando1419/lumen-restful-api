@@ -5,7 +5,7 @@ $router->get('/key', function () {
 });
 
 $router->get('/', function () use ($router) {
-    return 'Home Page!';
+    return 'RestFullApi Using Lumen!';
 });
 
 $router->group(['prefix' => '/api'], function() use ($router) {
@@ -15,3 +15,6 @@ $router->group(['prefix' => '/api'], function() use ($router) {
     $router->put('/authors/{author}', 'AuthorsController@update'); // Updates an author - PUT /api/authors/23
     $router->delete('authors/{author}', 'AuthorsController@destroy'); // Deletes an author - DELETE  /api/authors/23
 });
+
+// Authentication Routes:
+$router->post('/auth/login', 'AuthController@login'); // Login users using Json Web Token tecnique.

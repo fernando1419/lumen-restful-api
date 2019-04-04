@@ -15,9 +15,15 @@ class UsersTableSeeder extends Seeder
         User::create([
             'name'     => 'admin',
             'email'    => 'admin@admin.com',
-            'password' => bcrypt('123456')
+            'password' => app('hash')->make('123456')
         ]);
 
-        return factory(User::class, 29)->create();
+        User::create([
+            'name'     => 'user',
+            'email'    => 'user@user.com',
+            'password' => app('hash')->make('654321')
+        ]);
+
+        return factory(User::class, 28)->create();
     }
 }

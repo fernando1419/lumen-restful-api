@@ -63,6 +63,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'auth'        => App\Http\Middleware\Authenticate::class,
+    'jwt.auth'    => App\Http\Middleware\JwtMiddleware::class,
     'check-param' => App\Http\Middleware\CheckRouteParam::class,
 ]);
 

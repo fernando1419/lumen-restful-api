@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
-
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiController extends BaseController
@@ -34,7 +33,7 @@ class ApiController extends BaseController
     }
 
     /**
-     * respondBadRequest
+     * respondBadRequest (400)
      *
      * @param mixed $message
      * @param mixed check

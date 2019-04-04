@@ -20,7 +20,7 @@ class CheckRouteParam
         if ( $author_param && ! is_numeric($author_param) )
         {
             $apiController = new \App\Http\Controllers\ApiController();
-            return $apiController->respondBadRequest("Bad request. The parameter {$author_param} must be numeric.");
+            return $apiController->respondBadRequest("Bad request. The parameter '{$author_param}' must be numeric.");
         }
 
         return $next($request);

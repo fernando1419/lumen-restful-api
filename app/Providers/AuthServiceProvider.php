@@ -31,11 +31,7 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['auth']->viaRequest('api', function ($request) 
         {
-            // these credentials may come from body or headers tab in postman, not both
-            $email    = ($request->header('email')) ? $request->header('email') : $request->get('email'); 
-            $password = ($request->header('password')) ? $request->header('password') : $request->get('password'); 
             
-            return User::authenticateByEmailAndPassword($email, $password);
         });
     }
 }
