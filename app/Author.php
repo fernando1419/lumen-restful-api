@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 
 class Author extends Model {
@@ -19,13 +20,16 @@ class Author extends Model {
     protected $hidden = [];
 
     /**
-     * Validation rules for Author Model.
+     * Validation rules for Author Model
      *
-     * @var array
+     * @param mixed $ignoreId Id to Ignore on update requests.
+     * @return void
      */
-    public static $rules = [
-        'name' => 'required',
-        'email' => 'bail|required|email'
-    ];
-
+    protected static function rules($ignoreId = null) 
+    {
+        return [
+            'name' => 'required',
+            'email' => 'bail|required|email|unique:authors,email' . (!is_null($ignoreId) ? ",{$ignoreId}" : null)
+        ];
+    }     
 }

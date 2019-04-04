@@ -1,5 +1,10 @@
 <?php
 
+$router->get('/test', function () {
+    // TODO: Use this method for testing purposes.
+
+});
+
 $router->get('/key', function () {
     return str_random(32);
 });

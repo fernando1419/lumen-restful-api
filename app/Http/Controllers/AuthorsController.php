@@ -68,8 +68,8 @@ class AuthorsController extends ApiController
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), Author::$rules);
-
+        $validator = Validator::make($request->all(), Author::rules());
+        
         if ($validator->fails())
         {
             return $this->respondUnprocessableEntity($validator->errors());
@@ -98,8 +98,8 @@ class AuthorsController extends ApiController
             return $this->respondNotFound('Author does not exist.');
         }
 
-        $validator = Validator::make($request->all(), Author::$rules);
-
+        $validator = Validator::make($request->all(), Author::rules($author->id));
+        
         if ($validator->fails())
         {
             return $this->respondUnprocessableEntity($validator->errors());
