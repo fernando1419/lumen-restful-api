@@ -1,0 +1,61 @@
+version: '3.7'
+
+services:
+
+    php7-fpm:
+        build:
+            # usa el dockerfile del context para crear la imagen ferdockerizing/php7-fpm-alpine:0.1 si ésta no existiese
+            context: ./php7-fpm
+        container_name: php7-fpm
+        image: ferdockerizing/php7-fpm-alpine:0.1
+        restart: always
+        volumes:
+            - ../:/usr/share/nginx/html
+        networks:
+            - frontEnd-network
+            - backEnd-network
+        links:
+            - mysql
+
+    nginx:
+        build:
+            context: ./nginx
+        container_name: nginx
+        env_file: .env
+        image: ferdockerizing/nginx:0.1
+        volumes:
+            - ../:/usr/share/nginx/html
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./nginx/upstream.conf:/etc/nginx/conf.d/upstream.conf
+        ports:
+            - 8900:${PORT}
+            - ${HTTPS_PORT}:443
+        networks:
+            - backEnd-network
+        links:
+            - php7-fpm
+
+    mysql:
+        build:
+            context: ./mysql
+        container_name: mysql
+        image: ferdockerizing/mysql:0.1
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        volumes:
+            - ./mysql/database:/var/lib/mysql
+        ports:
+            - ${MYSQL_PORT}:3306
+        networks:
+            - backEnd-network
+
+networks:
+    frontEnd-network:
+        name: frontEnd # available with docker-compose 1.18, using the new "name" parameter to networks
+        driver: bridge
+    backEnd-network:
+        name: backEnd # available with docker-compose 1.18, using the new "name" parameter to networks
+        driver: bridge

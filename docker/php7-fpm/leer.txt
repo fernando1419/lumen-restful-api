@@ -1,0 +1,5 @@
+-- Comprobar que se instaló bien xdebug:
+
+$ php -i | grep Xdebug
+     with Xdebug v2.7.0, Copyright (c) 2002-2019, by Derick Rethans
+Support Xdebug on Patreon: https://www.patreon.com/bePatron?u=7864328

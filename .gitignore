@@ -3,6 +3,6 @@
 Homestead.json
 Homestead.yaml
 .env
+/docker/mysql/database
 /leer.txt
-/docker
 /.vscode
