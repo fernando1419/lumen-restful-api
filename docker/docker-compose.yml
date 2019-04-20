@@ -29,7 +29,7 @@ services:
             - ./nginx/upstream.conf:/etc/nginx/conf.d/upstream.conf
         ports:
             - 8900:${PORT}
-            - ${HTTPS_PORT}:443
+            - 443:${HTTPS_PORT}
         networks:
             - backEnd-network
         links:
