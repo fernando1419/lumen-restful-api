@@ -10,10 +10,10 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /etc/nginx/conf.d/*.conf /etc/nginx/nginx.conf
 
-COPY ./server.conf /etc/nginx/conf.d/server.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
-CMD sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/server.conf && nginx -g 'daemon off;'
-# ["nginx", "-g", "daemon off;"]
+CMD sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/nginx.conf && \
+    nginx -g 'daemon off;'
 
 WORKDIR /usr/share/nginx/html
 
