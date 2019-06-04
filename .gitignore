@@ -6,3 +6,4 @@ Homestead.yaml
 /docker/mysql/database
 /leer.txt
 /.vscode
+/.trash

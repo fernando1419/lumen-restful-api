@@ -1,7 +1,9 @@
-FROM nginx:latest
+# https://hub.docker.com/_/nginx?tab=description
+FROM nginx:1.16.0
 
-MAINTAINER Fernando Lamas <lamas.fernando1419@gmail.com>
+LABEL maintainer="Fernando Lamas <lamas.fernando1419@gmail.com>"
 
+# Debian Stretch
 RUN apt-get update && \
     apt-get install -y build-essential && \
     apt-get install -y dnsutils curl openssh-client openssh-server nano screen vim rsync traceroute \

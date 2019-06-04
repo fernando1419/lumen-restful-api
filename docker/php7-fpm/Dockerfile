@@ -1,6 +1,7 @@
-FROM php:7-fpm-alpine
+# https://hub.docker.com/_/php
+FROM php:7.3.6-fpm-alpine
 
-MAINTAINER Fernando Lamas <lamas.fernando1419@gmail.com>
+LABEL maintainer="Fernando Lamas <lamas.fernando1419@gmail.com>"
 
 RUN apk --no-cache update && \
     apk --no-cache upgrade && \
