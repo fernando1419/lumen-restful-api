@@ -1,6 +1,12 @@
-- Clear the content "mysql/database" directory before switching from mysql-debian image to mysql-alpine and viceversa.
+A- For switching between debian and alpine follow these steps:
+   * Edit docker-compose.yml to use the desired mysql image.
+   * Rename Dockerfile.debian to Dockerfile for using debian image.
+   * Rename Dockerfile.alpine to Dockerfile for using alpine image.
+   * Clear the content "mysql/database" directory before switching from mysql-debian image to mysql-alpine and viceversa.
+   * Rebuild the debian or alpine image if necessary.
 
-- Starting containers (2 ways):
+
+B- Starting containers (2 ways):
 
     1) Editing "docker-compose.yml" file accordingly and inside docker directory run:
         $ docker-compose down && docker-compose up -d
@@ -28,5 +34,5 @@
             -e MYSQL_ROOT_PASSWORD=root \
             -d ferdockerizing/mysql-debian:0.1
 
-- Accesing the container (alpine/debian):
+C- Accesing the container (alpine/debian):
     $ docker exec -it mysql /bin/bash
