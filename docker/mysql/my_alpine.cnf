@@ -1,0 +1,39 @@
+[mysqld]
+user                   = mysql
+datadir                = /var/lib/mysql
+port                   = 3306
+log-bin                = /var/lib/mysql/mysql-bin
+feedback               = on
+pid-file               = /run/mysqld/mysqld.pid
+socket                 = /run/mysqld/mysqld.sock
+symbolic-links         = 0
+innodb_flush_method    = fsync
+innodb_use_native_aio  = 0
+innodb_doublewrite     = 1
+innodb_data_file_path  = ibdata1:30M:autoextend
+lower_case_table_names = 2
+
+# Set buffer pool size to 50-80% of your computer's memory
+innodb_buffer_pool_instances = 8
+innodb_buffer_pool_size = 1024M
+innodb_buffer_pool_dump_at_shutdown = ON
+innodb_buffer_pool_load_now = ON
+
+# Set the log file size to about 25% of the buffer pool size
+innodb_log_file_size = 128M
+innodb_log_buffer_size = 12M
+
+# LOGGING
+general_log_file                = /run/mysqld/mysql.log
+log-error                       = /run/mysqld/mysql-error.log
+
+[mysqldump]
+quick
+quote-names
+max_allowed_packet  = 32M
+
+#
+# IMPORTANT: Additional settings that can override those from this file!
+# The files must end with '.cnf', otherwise they'll be ignored.
+#
+# !includedir /etc/mysql/conf.d/

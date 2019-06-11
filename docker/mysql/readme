@@ -1,0 +1,32 @@
+- Clear the content "mysql/database" directory before switching from mysql-debian image to mysql-alpine and viceversa.
+
+- Starting containers (2 ways):
+
+    1) Editing "docker-compose.yml" file accordingly and inside docker directory run:
+        $ docker-compose down && docker-compose up -d
+
+    2) Using "docker", inside "docker/mysql" directory run:
+        ** El contenedor de la imagen de Alpine usa el script "startup.sh" que crea las variables según se especifiquen, 3 opciones:
+        - MYSQL_ROOT_PASSWORD -> si no se especifica se crea por defecto a "root".
+        - MYSQL_DATABASE -> se crea la BD sólo si se especifica.
+        - MYSQL_USER y MYSQL_PASSWORD -> deben especificarse ambas para que se cree el usuario y contraseña.
+
+        $ docker run --name mysql -p 3306:3306 \
+            -v /e/Projects/DOCKER/5_lumen_restfullAPIs/docker/mysql/database:/var/lib/mysql \
+            -e MYSQL_USER=gerardo \
+            -e MYSQL_PASSWORD=solitario \
+            -e MYSQL_DATABASE=clientes \
+            -e MYSQL_ROOT_PASSWORD=root \
+            -d ferdockerizing/mysql-alpine:0.1
+
+        ** El contenedor de Debian necesita TODAS las variables de entorno:
+        $ docker run --name mysql -p 3306:3306 \
+            -v /e/Projects/DOCKER/5_lumen_restfullAPIs/docker/mysql/database:/var/lib/mysql \
+            -e MYSQL_USER=gerardo \
+            -e MYSQL_PASSWORD=solitario \
+            -e MYSQL_DATABASE=clientes \
+            -e MYSQL_ROOT_PASSWORD=root \
+            -d ferdockerizing/mysql-debian:0.1
+
+- Accesing the container (alpine/debian):
+    $ docker exec -it mysql /bin/bash

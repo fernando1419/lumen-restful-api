@@ -1,0 +1,13 @@
+# https://hub.docker.com/_/mysql # (debian stretch)
+FROM mysql:8.0.16
+
+LABEL maintainer="Fernando Lamas <lamas.fernando1419@gmail.com>"
+
+RUN apt-get update && \
+    apt-get install -y net-tools iputils-ping
+
+COPY ./my_debian.cnf /etc/mysql/conf.d/my.cnf
+
+EXPOSE 3306
+
+CMD ["mysqld"]

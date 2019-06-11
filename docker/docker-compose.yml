@@ -37,7 +37,8 @@ services:
         build:
             context: ./mysql
         container_name: mysql
-        image: ferdockerizing/mysql:0.1
+        image: ferdockerizing/mysql-alpine:0.1
+        # image: ferdockerizing/mysql-debian:0.1
         environment:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
             - MYSQL_USER=${MYSQL_USER}
