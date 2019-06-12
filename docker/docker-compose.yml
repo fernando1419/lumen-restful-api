@@ -22,7 +22,8 @@ services:
             context: ./nginx
         container_name: nginx
         env_file: .env
-        image: ferdockerizing/nginx:0.1
+        image: ferdockerizing/nginx-alpine:0.1
+        # image: ferdockerizing/nginx-debian:0.1
         volumes:
             - ../:/usr/share/nginx/html
         ports:

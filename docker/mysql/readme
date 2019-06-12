@@ -8,10 +8,10 @@ A- For switching between debian and alpine follow these steps:
 
 B- Starting containers (2 ways):
 
-    1) Editing "docker-compose.yml" file accordingly and inside docker directory run:
+    1) Using "docker-compose", edit "docker-compose.yml" file accordingly and inside "docker" directory run:
         $ docker-compose down && docker-compose up -d
 
-    2) Using "docker", inside "docker/mysql" directory run:
+    2) Using "docker":
         ** El contenedor de la imagen de Alpine usa el script "startup.sh" que crea las variables según se especifiquen, 3 opciones:
         - MYSQL_ROOT_PASSWORD -> si no se especifica se crea por defecto a "root".
         - MYSQL_DATABASE -> se crea la BD sólo si se especifica.

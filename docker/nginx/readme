@@ -1,0 +1,19 @@
+A- For switching between debian and alpine follow these steps:
+   * Edit docker-compose.yml to use the desired nginx image.
+   * Rename Dockerfile.debian to Dockerfile for using debian image.
+   * Rename Dockerfile.alpine to Dockerfile for using alpine image.
+   * Rebuild the debian or alpine image if necessary.
+
+B- Starting containers (2 ways):
+
+    1) Using "docker-compose", edit the "docker-compose.yml" file accordingly and inside "docker" directory run:
+        $ docker-compose down && docker-compose up -d
+
+    2) Using "docker":
+        Using a PORT environment variable:
+        $ docker run --name nginx -p 8000:80 -e PORT=1522 -d ferdockerizing/nginx-debian:0.1
+        Using an environment file, inside the "docker/nginx" directory run:
+        $ docker run --name nginx -p 8000:80 --env-file ../.env -d ferdockerizing/nginx-alpine:0.1
+
+C- Accesing the container (alpine/debian):
+    $ docker exec -it nginx /bin/bash
