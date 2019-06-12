@@ -1,0 +1,10 @@
+A- Starting containers (2 ways):
+
+    1) Using "docker-compose", edit the "docker-compose.yml" file accordingly and inside "docker" directory run:
+        $ docker-compose down && docker-compose up -d
+
+    2) Using "docker":
+        $ docker run --name php7-fpm -d ferdockerizing/php-alpine:0.1
+
+B- Accesing the alpine container:
+    $ docker exec -it php7-fpm /bin/bash

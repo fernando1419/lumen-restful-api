@@ -7,7 +7,7 @@ services:
             # usa el dockerfile del context para crear la imagen ferdockerizing/php:0.1 si ésta no existiese
             context: ./php7-fpm
         container_name: php7-fpm
-        image: ferdockerizing/php:0.1
+        image: ferdockerizing/php-alpine:0.1
         restart: always
         volumes:
             - ../:/usr/share/nginx/html
