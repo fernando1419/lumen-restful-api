@@ -1,0 +1,28 @@
+A- Starting containers (2 ways):
+
+    1) Using "docker-compose", edit the "docker-compose.yml" file accordingly and inside "docker" directory run:
+        $ docker-compose down && docker-compose up -d
+
+    2) Using "docker":
+        $ docker run --name postgresql -p 5432:5432 \
+            -e POSTGRES_PASSWORD=secret \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_DB=clients \
+            -v pgdata:/var/lib/postgresql/data \
+            -d ferdockerizing/postgresql-alpine:0.1
+
+B- Accesing the alpine container:
+    $ docker exec -it postgresql /bin/bash
+
+Importante:
+Para las persistencia de datos de postgres en windows con docker, lamentablemente la única opción que queda es crear
+un volumen en este caso "pgdata" DENTRO DE LA DOCKER-MACHINE, ya se manualmente:
+    $ docker volume create pgdata
+ó bien especificado en el docker-compose:
+    volumes:
+        - pgdata:/var/lib/postgresql/data
+    volumes:
+        pgdata:
+            name: "pgdata"
+YA QUE EN WINDOWS Y MAC NO SE PUEDEN CREAR VOLÚMENES EN EL HOST QUE ESTÉN FUERA DE LOS CONTAINERS, EN LINUX SI SE PUEDE.
+
