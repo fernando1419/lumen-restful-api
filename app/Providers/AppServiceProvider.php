@@ -20,5 +20,9 @@ class AppServiceProvider extends ServiceProvider
                 $this->app->register('Vluzrmos\Tinker\TinkerServiceProvider');
             }
         }
+
+        if (in_array($this->app->environment(), ['stage', 'production'])) { // $this->app->environment == env('APP_ENV')
+            \URL::forceScheme('https');
+        }
     }
 }
