@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="notification has-background-grey-light is-size-5 has-text-left">
-        <strong> Restfull Api developed using the Lumen Framework. </strong>
+        <strong> Restful Api developed using the Lumen Framework. </strong>
     </div>
 
     <div>
