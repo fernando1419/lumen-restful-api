@@ -9,6 +9,7 @@
         <li style="margin-bottom:20px;"> This API is created for handling requests to Authors and Books entities. For the time being only the API for handling "Authors" has been developed. </li>
         <li style="margin-bottom:20px;"> Over the near term, I will be working on the pending "Books" API as also in a front-end development to consume these APIs. </li>
         <li style="margin-bottom:20px;"> I will be using VueJS or Angular programming language for client-side development. </li>
+    <li style="margin-bottom:20px;"> <a href="{{ url('/auth/login') }}">Click here </a> to generate a JWT to perform Insert, Update and Delete requests. </li>
     </div>
 @endsection
 

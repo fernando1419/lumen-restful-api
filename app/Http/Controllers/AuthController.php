@@ -35,7 +35,17 @@ class AuthController extends ApiController
             'exp' => time() + 60 * 60 // Token Expiration time (60 minutes).
         ];
 
-        return JWT::encode($payload, env('JWT_SECRET')); // `JWT_SECRET` is used for encoding and decoding the token. 
+        return JWT::encode($payload, env('JWT_SECRET')); // `JWT_SECRET` is used for encoding and decoding the token.
+    }
+
+    /**
+     * Displays the login form.
+     *
+     * @return view.
+     */
+    public function show()
+    {
+        return view('login');
     }
 
     /**
@@ -43,23 +53,20 @@ class AuthController extends ApiController
      *
      * @return void
      */
-    public function login()
+    public function store()
     {
         $validator = Validator::make($this->request->all(), User::$rules);
 
-        if ( $validator->fails() ) 
-        {
+        if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->errors());
         }
-                
+
         $loginAttempt = User::authenticateByEmailAndPassword($this->request->get('email'), $this->request->get('password'));
 
-        if ( $loginAttempt instanceof User )
-        {
-            return $this->respond( ['token' => $this->createJWT($loginAttempt)] );   
+        if ($loginAttempt instanceof User) {
+            return $this->respond(['token' => $this->createJWT($loginAttempt)]);
         }
 
         return $this->respondUnauthorized();
     }
-
 }
