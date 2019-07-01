@@ -12,7 +12,7 @@
 
             <form method="POST" action="/auth/login">
 
-                {{-- csrf_field() --}}
+                {{-- csrf_field() --}} <!-- really difficult to implement in Lumen -->
 
                 <div class="field">
                     <label class="label" for="email">Email</label>
