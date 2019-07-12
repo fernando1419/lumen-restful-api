@@ -1,17 +1,8 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| Here you may define all of your model factories. Model factories give
-| you a convenient way to create models for testing and seeding your
-| database. Just tell the factory how a default model should look.
-|
-*/
+use Faker\Generator as Faker;
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(App\User::class, function (Faker $faker) {
     return [
         'name'     => $faker->name,
         'email'    => $faker->email,
@@ -20,9 +11,9 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 /**
- * Factory definition for model Author.
+ * Factory definition for Author model.
  */
-$factory->define(App\Author::class, function ($faker) {
+$factory->define(App\Author::class, function (Faker $faker) {
     return [
         'name'                   => $faker->name,
         'email'                  => $faker->email,
@@ -31,5 +22,17 @@ $factory->define(App\Author::class, function ($faker) {
         'location'               => $faker->address,
         'last_article_published' => $faker->sentence,
         'some_boolean'           => $faker->boolean()
+    ];
+});
+
+/**
+ * Factory definition for Book model.
+ */
+$factory->define(App\Book::class, function (Faker $faker) {
+    return [
+        'title'       => $faker->sentence,
+        'description' => $faker->paragraph,
+        'isbn'        => $faker->isbn10,
+        'author_id'   => $faker->numberBetween(1, 50)
     ];
 });
