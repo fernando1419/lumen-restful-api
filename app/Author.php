@@ -1,9 +1,11 @@
-<?php namespace App;
+<?php
 
-use Illuminate\Http\Request;
+namespace App;
+
 use Illuminate\Database\Eloquent\Model;
 
-class Author extends Model {
+class Author extends Model
+{
 
     /**
      * The attributes that are mass assignable.
@@ -22,14 +24,14 @@ class Author extends Model {
     /**
      * Validation rules for Author Model
      *
-     * @param mixed $ignoreId Id to Ignore on update requests.
+     * @param integer $ignoreId Id to Ignore on update requests.
      * @return void
      */
-    protected static function rules($ignoreId = null) 
+    protected static function rules($ignoreId = null)
     {
         return [
             'name' => 'required',
             'email' => 'bail|required|email|unique:authors,email' . (!is_null($ignoreId) ? ",{$ignoreId}" : null)
         ];
-    }     
+    }
 }

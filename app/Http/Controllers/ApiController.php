@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,10 +13,10 @@ class ApiController extends BaseController
      * @var integer
      */
     protected $statusCode = Response::HTTP_OK; // 200
-    
+
     /**
      * Get the value of statusCode
-     */ 
+     */
     public function getStatusCode()
     {
         return $this->statusCode;
@@ -24,7 +26,7 @@ class ApiController extends BaseController
      * Set the value of statusCode
      *
      * @return  self
-     */ 
+     */
     public function setStatusCode($statusCode)
     {
         $this->statusCode = $statusCode;
@@ -35,8 +37,7 @@ class ApiController extends BaseController
     /**
      * respondBadRequest (400)
      *
-     * @param mixed $message
-     * @param mixed check
+     * @param string $message
      * @return void
      */
     public function respondBadRequest($message = 'Bad input parameter, check your parameters values.')
@@ -47,18 +48,18 @@ class ApiController extends BaseController
     /**
      * respondUnauthorized (401)
      *
-     * @param mixed $message
+     * @param string $message
      * @return void
      */
     public function respondUnauthorized($message = 'Unauthorized, check your credentials!.')
     {
         return $this->setStatusCode(Response::HTTP_UNAUTHORIZED)->respondWithError($message);
     }
-    
+
     /**
      * respondNotFound (404)
      *
-     * @param mixed $message
+     * @param string $message
      * @return void
      */
     public function respondNotFound($message = 'Not found!')
@@ -69,18 +70,18 @@ class ApiController extends BaseController
     /**
      * respondUnprocessableEntity (422)
      *
-     * @param mixed $message
+     * @param string $message
      * @return void
      */
     public function respondUnprocessableEntity($message)
     {
-        return $this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->respondWithError($message);    
+        return $this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)->respondWithError($message);
     }
-    
+
     /**
      * respondInternalError (500)
      *
-     * @param mixed $message
+     * @param string $message
      * @return void
      */
     public function respondInternalError($message = 'Internal Error!')
@@ -91,8 +92,7 @@ class ApiController extends BaseController
     /**
      * respondWithError
      *
-     * @param mixed $data
-     * @param array $headers
+     * @param string $message
      * @return void
      */
     public function respondWithError($message)
@@ -103,19 +103,18 @@ class ApiController extends BaseController
                 'status_code' => $this->getStatusCode(),
                 'url'         => \URL::current()
             ]
-        ]); 
+        ]);
     }
-    
+
     /**
      * respond
      *
-     * @param mixed $data
+     * @param string $data
      * @param array $headers
      * @return void
      */
     public function respond($data, $headers = [])
     {
         return response()->json($data, $this->getStatusCode(), $headers);
-    }   
-    
+    }
 }
