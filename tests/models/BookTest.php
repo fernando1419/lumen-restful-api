@@ -44,14 +44,14 @@ class BookTest extends TestCase
         ]);
 
         $this->assertEquals(1, $book->id);
-        $this->assertNotNull($book[$this->required_attributes[0]]); // title
-        $this->assertNotEmpty($book[$this->required_attributes[0]]);
-        $this->assertNotNull($book[$this->required_attributes[1]]); // author_id
-        $this->assertNotEmpty($book[$this->required_attributes[1]]);
+        foreach ($this->required_attributes as $attribute) {
+            $this->assertNotNull($book->$attribute);
+            $this->assertNotEmpty($book->$attribute);
+        }
     }
 
     /** @test */
-    public function a_book_model_can_be_persisted_if_optional_attibutes_are_specified()
+    public function a_book_model_can_be_persisted_if_its_optional_attibutes_are_specified()
     {
         $book = Book::create([
             'title'       => 'This is a title of a book',
@@ -60,12 +60,12 @@ class BookTest extends TestCase
             'author_id'   => 10
         ]);
 
-        $this->assertEquals($book[$this->optional_attributes[0]], 'This is a description of a book');
-        $this->assertEquals($book[$this->optional_attributes[1]], 2344124124);
+        $this->assertEquals($book->description, 'This is a description of a book');
+        $this->assertEquals($book->isbn, 2344124124);
     }
 
     /** @test */
-    public function a_book_model_can_be_persisted_if_optional_attibutes_are_null_or_empty()
+    public function a_book_model_can_also_be_persisted_if_its_optional_attibutes_are_null_or_empty()
     {
         $book1 = Book::create([
             'title'       => 'This book has an emtpy description and isbn',
@@ -81,9 +81,9 @@ class BookTest extends TestCase
             'author_id'   => 10
         ]);
 
-        $this->assertEmpty($book1[$this->optional_attributes[0]]); // description
-        $this->assertNull($book2[$this->optional_attributes[0]]);
-        $this->assertEmpty($book1[$this->optional_attributes[1]]); // isbn
-        $this->assertNull($book2[$this->optional_attributes[1]]);
+        foreach ($this->optional_attributes as $attribute) {
+            $this->assertEmpty($book1->$attribute);
+            $this->assertNull($book2->$attribute);
+        }
     }
 }
