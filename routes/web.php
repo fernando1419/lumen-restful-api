@@ -18,6 +18,8 @@ $router->group(['prefix' => '/api'], function () use ($router) {
     $router->get('/authors/{author}', 'AuthorsController@show'); // Get one author - GET /api/authors/23
     $router->put('/authors/{author}', 'AuthorsController@update'); // Updates an author - PUT /api/authors/23
     $router->delete('authors/{author}', 'AuthorsController@destroy'); // Deletes an author - DELETE /api/authors/23
+
+    $router->get('/books', 'BooksController@index');
 });
 
 // Authentication Routes:
