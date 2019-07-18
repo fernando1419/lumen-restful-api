@@ -5,7 +5,6 @@ namespace tests\models;
 use App\Book;
 use TestCase; // this uses tests/TestCase.php that implements createApplication() of Laravel\Lumen\Testing\TestCase.
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class BookTest extends TestCase
@@ -24,6 +23,7 @@ class BookTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        Book::truncate();
     }
 
     /** @test */
@@ -36,7 +36,7 @@ class BookTest extends TestCase
     }
 
     /** @test */
-    public function a_book_model_can_only_be_persisted_if_its_required_attributes_are_specified()
+    public function a_book_object_can_only_be_persisted_if_its_required_attributes_are_specified()
     {
         $book = Book::create([
             'title'     => 'This is a title',
@@ -51,7 +51,7 @@ class BookTest extends TestCase
     }
 
     /** @test */
-    public function a_book_model_can_be_persisted_if_its_optional_attibutes_are_specified()
+    public function a_book_object_can_be_persisted_if_its_optional_attributes_are_specified()
     {
         $book = Book::create([
             'title'       => 'This is a title of a book',
@@ -65,7 +65,7 @@ class BookTest extends TestCase
     }
 
     /** @test */
-    public function a_book_model_can_also_be_persisted_if_its_optional_attibutes_are_null_or_empty()
+    public function a_book_object_can_be_persisted_if_its_optional_attributes_are_null_or_empty()
     {
         $book1 = Book::create([
             'title'       => 'This book has an emtpy description and isbn',
