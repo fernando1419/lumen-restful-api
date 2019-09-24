@@ -10,7 +10,8 @@ services:
         image: ferdockerizing/php-alpine:0.1
         restart: always
         volumes:
-            - ../:/usr/share/nginx/html
+            # - ../:/usr/share/nginx/html # Not working (must be full path for mapping)
+            - /home/docker/projects/5_lumen_restfullAPIs:/usr/share/nginx/html
         networks:
             - frontEnd-network
             - backEnd-network
@@ -26,7 +27,8 @@ services:
         image: ferdockerizing/nginx-alpine:0.1
         # image: ferdockerizing/nginx-debian:0.1
         volumes:
-            - ../:/usr/share/nginx/html
+            # - ../:/usr/share/nginx/html
+            - /home/docker/projects/5_lumen_restfullAPIs:/usr/share/nginx/html
         ports:
             - 8900:${PORT}
             - 443:${HTTPS_PORT}
@@ -47,7 +49,8 @@ services:
     #         - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     #         - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     #     volumes:
-    #         - ./mysql/database:/var/lib/mysql
+    #         # - ./mysql/database:/var/lib/mysql
+    #         - /home/docker/lumen_restful_api/docker/mysql/database:/var/lib/mysql
     #     ports:
     #         - ${MYSQL_PORT}:3306
     #     networks:
@@ -81,3 +84,5 @@ networks:
 volumes:
     pgdata:
         name: "pgdata"
+        external: false # docker-compose up creates it, if it not exists.
+

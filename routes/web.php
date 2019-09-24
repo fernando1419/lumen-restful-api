@@ -20,6 +20,7 @@ $router->group(['prefix' => '/api'], function () use ($router) {
     $router->delete('authors/{author}', 'AuthorsController@destroy'); // Deletes an author - DELETE /api/authors/23
 
     $router->get('/books', 'BooksController@index');
+    $router->get('/books/{book}', 'BooksController@show');
 });
 
 // Authentication Routes:
