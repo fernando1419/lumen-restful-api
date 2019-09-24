@@ -81,7 +81,9 @@ $app->routeMiddleware([
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Appzcoder\LumenRoutesList\RoutesCommandServiceProvider::class);
-$app->register(Laravel\Tinker\TinkerServiceProvider::class);
+if (class_exists('Laravel\Tinker\TinkerServiceProvider')) {
+	$app->register(Laravel\Tinker\TinkerServiceProvider::class);
+}
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
