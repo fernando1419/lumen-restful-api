@@ -38,4 +38,14 @@ class ApiControllerTest extends TestCase
 			]
 		];
 	}
+
+	protected function assertObjectHasAttributes()
+	{
+		$args   = func_get_args(); // get all parameters.
+		$object = array_shift($args); // first parameter is the instance
+
+		foreach ($args as $attribute) {
+			$this->assertObjectHasAttribute($attribute, $object);
+		}
+	}
 }
