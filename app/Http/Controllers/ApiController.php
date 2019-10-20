@@ -31,7 +31,7 @@ class ApiController extends BaseController
 	{
 		$this->statusCode = $statusCode;
 
-		return $this;
+		return $this;  // for continue chaining with other methods.
 	}
 
 	/**

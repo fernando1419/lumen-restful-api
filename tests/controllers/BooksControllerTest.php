@@ -13,7 +13,6 @@ class BooksControllerTest extends ApiControllerTest
 	public function it_responds_with_200_code_and_siutable_json_structure_when_there_are_books()
 	{
 		$books = Book::take(10)->get(); // given some books in DB.
-
 		$this->get('/api/books'); // when call GET request to /api/books
 
 		$this->seeStatusCode(200) // then...
@@ -127,5 +126,62 @@ class BooksControllerTest extends ApiControllerTest
 			'message'     => 'Book does not exist.',
 			'status_code' => 404
 		]);
+	}
+
+	/** @test */
+	public function it_creates_a_new_book_given_valid_parameters()
+	{
+		Book::truncate(); // given No books in DB.
+
+		$data = [
+			'title'       => 'New book Title',
+			'description' => 'New book Description',
+			'isbn'        => '0910234910000000000',
+			'author_id'   => 2
+		];
+
+		$request  = $this->post('api/books', $data); // when calling api...
+		$response = json_decode($request->response->getContent())->data;
+        // dd($response); // stdclass with all fields declared in the BookTransformer Class.
+
+		$this->assertResponseStatus(201); // then...
+		$this->assertInstanceOf('stdclass', $response);
+		$this->seeJsonStructure([
+			'data' => [
+					'title',
+					'description',
+					'isbn',
+					'author_id',
+					'updated',
+					'released'
+			],
+			'message'
+		]);
+		$this->seeJson([
+			'title'       => $response->title,
+			'description' => $response->description,
+			'isbn'        => $response->isbn,
+			'author_id'   => $response->author_id,
+			'updated'     => $response->updated,
+			'released'    => $response->released,
+			'message'     => "Book ID: 1 successfully created.!"
+		]);
+	}
+
+	/** @test */
+	public function it_throws_a_422_if_a_new_book_request_fails_validation()
+	{
+		//  it tests that required fields of a Book instance are present.
+		$request = $this->post('api/books', [], ['Accept' => 'application/json']); // when calling the api without any data..
+
+		$response = json_decode($request->response->getContent()); // dd($response->error->message);
+
+		$this->assertResponseStatus(422); // then..
+		$this->assertInstanceOf('stdClass', $response);
+		$this->assertObjectHasAttribute('error', $response);
+		$this->assertObjectHasAttributes($response->error, 'message', 'url', 'status_code');
+		$this->assertObjectHasAttributes($response->error->message, 'title', 'author_id');
+		$this->assertEquals('The title field is required.', $response->error->message->title[0]);
+		$this->assertEquals('The author id field is required.', $response->error->message->author_id[0]);
 	}
 }
