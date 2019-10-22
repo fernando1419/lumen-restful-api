@@ -8,3 +8,4 @@ Homestead.yaml
 /leer.txt
 /.vscode
 /.trash
+/tests/coverage
