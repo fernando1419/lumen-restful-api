@@ -55,7 +55,7 @@ class BooksController extends ApiController
 	{
 		$validation = Validator::make($request->all(), Book::rules()); // ->validate();
 
-		if ($validation->fails()) {
+        if ($validation->fails()) {
 			return $this->respondUnprocessableEntity($validation->errors());
 		}
 

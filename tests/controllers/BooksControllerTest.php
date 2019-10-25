@@ -142,7 +142,7 @@ class BooksControllerTest extends ApiControllerTest
 
 		$request  = $this->post('api/books', $data); // when calling api...
 		$response = json_decode($request->response->getContent())->data;
-        // dd($response); // stdclass with all fields declared in the BookTransformer Class.
+		// dd($response); // stdclass with all fields declared in the BookTransformer Class.
 
 		$this->assertResponseStatus(201); // then...
 		$this->assertInstanceOf('stdclass', $response);
@@ -169,19 +169,51 @@ class BooksControllerTest extends ApiControllerTest
 	}
 
 	/** @test */
-	public function it_throws_a_422_if_a_new_book_request_fails_validation()
+	public function it_422s_if_a_new_book_request_fails_validation()
 	{
-		//  it tests that required fields of a Book instance are present.
-		$request = $this->post('api/books', [], ['Accept' => 'application/json']); // when calling the api without any data..
+		$invalidData = [
+			[], // required title and author_id
+			['title' => null, 'author_id' => 2], // required title
+			['title' => 'Valid Book Title', 'author_id' => null], // required author_id
+			['title' => 'u'], // min title lenght = 3
+			['author_id' => 'XXX'], // author_id must be numeric
+		];
 
+		$response = $this->getResponseGivenInvalidDataInRequest($invalidData[0]);
+		$this->assertObjectHasAttributes($response->error->message, 'title', 'author_id');
+		$this->assertEquals('The title field is required.', $response->error->message->title[0]);
+		$this->assertEquals('The author id field is required.', $response->error->message->author_id[0]);
+
+		$response = $this->getResponseGivenInvalidDataInRequest($invalidData[1]);
+		$this->assertObjectHasAttributes($response->error->message, 'title');
+		$this->assertEquals('The title field is required.', $response->error->message->title[0]);
+
+		$response = $this->getResponseGivenInvalidDataInRequest($invalidData[2]);
+		$this->assertObjectHasAttributes($response->error->message, 'author_id');
+        $this->assertEquals('The author id field is required.', $response->error->message->author_id[0]);
+
+        $response = $this->getResponseGivenInvalidDataInRequest($invalidData[3]);
+		$this->assertObjectHasAttributes($response->error->message, 'title');
+        $this->assertEquals('The title must be at least 3 characters.', $response->error->message->title[0]);
+
+        $response = $this->getResponseGivenInvalidDataInRequest($invalidData[4]);
+		$this->assertObjectHasAttributes($response->error->message, 'author_id');
+        $this->assertEquals('The author id must be a number.', $response->error->message->author_id[0]);
+    }
+
+	/**
+	 * @coversNothing
+	 */
+	private function getResponseGivenInvalidDataInRequest($data)
+	{
+		$request  = $this->post('api/books', $data, ['Accept' => 'application/json']); // when calling the api without any data..
 		$response = json_decode($request->response->getContent()); // dd($response->error->message);
-
+        // dd($response);
 		$this->assertResponseStatus(422); // then..
 		$this->assertInstanceOf('stdClass', $response);
 		$this->assertObjectHasAttribute('error', $response);
 		$this->assertObjectHasAttributes($response->error, 'message', 'url', 'status_code');
-		$this->assertObjectHasAttributes($response->error->message, 'title', 'author_id');
-		$this->assertEquals('The title field is required.', $response->error->message->title[0]);
-		$this->assertEquals('The author id field is required.', $response->error->message->author_id[0]);
+
+		return $response;
 	}
 }

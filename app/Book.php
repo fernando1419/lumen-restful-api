@@ -29,7 +29,7 @@ class Book extends Model
 	{
 		return [
 			'title'     => 'required|min:3',
-			'author_id' => 'required'
+			'author_id' => 'required|numeric'
 		];
 	}
 }
