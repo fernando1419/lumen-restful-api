@@ -18,14 +18,15 @@ $router->get('/', function ()
 $router->group(['prefix' => '/api'], function () use ($router)
 {
 	$router->get('/authors', 'AuthorsController@index'); // GET /api/authors (all authors)
-	$router->post('/authors', 'AuthorsController@store'); // Create an author - POST /api/authors
 	$router->get('/authors/{author}', 'AuthorsController@show'); // Get one author - GET /api/authors/23
+	$router->post('/authors', 'AuthorsController@store'); // Create an author - POST /api/authors
 	$router->put('/authors/{author}', 'AuthorsController@update'); // Updates an author - PUT /api/authors/23
 	$router->delete('authors/{author}', 'AuthorsController@destroy'); // Deletes an author - DELETE /api/authors/23
 
 	$router->get('/books', 'BooksController@index');
 	$router->get('/books/{book}', 'BooksController@show');
 	$router->post('/books', 'BooksController@store');
+	$router->put('/books/{book}', 'BooksController@update');
 });
 
 // Authentication Routes:

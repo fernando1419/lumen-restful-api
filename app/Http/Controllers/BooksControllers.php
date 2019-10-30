@@ -53,9 +53,9 @@ class BooksController extends ApiController
 	 */
 	public function store(Request $request)
 	{
-		$validation = Validator::make($request->all(), Book::rules()); // ->validate();
+		$validation = Validator::make($request->all(), Book::rules(), Book::messages());
 
-        if ($validation->fails()) {
+		if ($validation->fails()) {
 			return $this->respondUnprocessableEntity($validation->errors());
 		}
 
@@ -64,6 +64,36 @@ class BooksController extends ApiController
 		return $this->setStatusCode(201)->respond([
 			'data'    => (new BookTransformer())->transform($newBook),
 			'message' => "Book ID: {$newBook->id} successfully created.!"
+		]);
+	}
+
+	/**
+	 * update PUT('api/books/bookId')
+	 *
+	 * @param Request $request
+	 * @param mixed $bookId
+	 * @return void
+	 */
+	public function update(Request $request, $bookId)
+	{
+		$book = Book::find($bookId);
+
+		if ( ! $book) {
+			return $this->respondNotFound('Book does not exist.');
+		}
+
+		$validation = Validator::make($request->all(), Book::rules(), Book::messages());
+
+		if ($validation->fails()) {
+			return $this->respondUnprocessableEntity($validation->errors());
+		}
+
+		$book->fill($request->all());
+		$book->save();
+
+		return $this->setStatusCode(200)->respond([
+			'data'    => (new BookTransformer())->transform($book),
+			'message' => "Book ID: {$book->id} successfully updated.!"
 		]);
 	}
 }

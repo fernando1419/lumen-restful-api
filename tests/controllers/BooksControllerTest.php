@@ -3,6 +3,7 @@
 namespace tests\controllers;
 
 use App\Book;
+use App\Author;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class BooksControllerTest extends ApiControllerTest
@@ -137,7 +138,7 @@ class BooksControllerTest extends ApiControllerTest
 			'title'       => 'New book Title',
 			'description' => 'New book Description',
 			'isbn'        => '0910234910000000000',
-			'author_id'   => 2
+			'author_id'   => Author::find(20)->id // existing author with id=20.
 		];
 
 		$request  = $this->post('api/books', $data); // when calling api...
@@ -148,12 +149,12 @@ class BooksControllerTest extends ApiControllerTest
 		$this->assertInstanceOf('stdclass', $response);
 		$this->seeJsonStructure([
 			'data' => [
-					'title',
-					'description',
-					'isbn',
-					'author_id',
-					'updated',
-					'released'
+				'title',
+				'description',
+				'isbn',
+				'author_id',
+				'updated',
+				'released'
 			],
 			'message'
 		]);
@@ -173,10 +174,11 @@ class BooksControllerTest extends ApiControllerTest
 	{
 		$invalidData = [
 			[], // required title and author_id
-			['title' => null, 'author_id' => 2], // required title
-			['title' => 'Valid Book Title', 'author_id' => null], // required author_id
-			['title' => 'u'], // min title lenght = 3
+			['title'     => null, 'author_id' => 2], // required title
+			['title'     => 'Valid Book Title', 'author_id' => null], // required author_id
+			['title'     => 'u'], // min title lenght = 3
 			['author_id' => 'XXX'], // author_id must be numeric
+			['title'     => 'valid title', 'author_id' => '164566465458864566564465646'], // author_id must exist in authors table.
 		];
 
 		$response = $this->getResponseGivenInvalidDataInRequest($invalidData[0]);
@@ -190,16 +192,21 @@ class BooksControllerTest extends ApiControllerTest
 
 		$response = $this->getResponseGivenInvalidDataInRequest($invalidData[2]);
 		$this->assertObjectHasAttributes($response->error->message, 'author_id');
-        $this->assertEquals('The author id field is required.', $response->error->message->author_id[0]);
+		$this->assertEquals('The author id field is required.', $response->error->message->author_id[0]);
 
-        $response = $this->getResponseGivenInvalidDataInRequest($invalidData[3]);
+		$response = $this->getResponseGivenInvalidDataInRequest($invalidData[3]);
 		$this->assertObjectHasAttributes($response->error->message, 'title');
-        $this->assertEquals('The title must be at least 3 characters.', $response->error->message->title[0]);
+		$this->assertEquals('The title must be at least 3 characters.', $response->error->message->title[0]);
 
-        $response = $this->getResponseGivenInvalidDataInRequest($invalidData[4]);
+		$response = $this->getResponseGivenInvalidDataInRequest($invalidData[4]);
 		$this->assertObjectHasAttributes($response->error->message, 'author_id');
-        $this->assertEquals('The author id must be a number.', $response->error->message->author_id[0]);
-    }
+		$this->assertEquals('The author id must be a number.', $response->error->message->author_id[0]);
+
+		$response = $this->getResponseGivenInvalidDataInRequest($invalidData[5]);
+		$this->assertObjectHasAttributes($response->error->message, 'author_id');
+		$this->notSeeInDatabase('books', ['author_id' => $invalidData[5]['author_id']]);
+		$this->assertEquals('The author_id value does not exist in table authors', $response->error->message->author_id[0]);
+	}
 
 	/**
 	 * @coversNothing
@@ -207,13 +214,58 @@ class BooksControllerTest extends ApiControllerTest
 	private function getResponseGivenInvalidDataInRequest($data)
 	{
 		$request  = $this->post('api/books', $data, ['Accept' => 'application/json']); // when calling the api without any data..
-		$response = json_decode($request->response->getContent()); // dd($response->error->message);
-        // dd($response);
+		$response = json_decode($request->response->getContent());
+		// dd($response);
 		$this->assertResponseStatus(422); // then..
 		$this->assertInstanceOf('stdClass', $response);
 		$this->assertObjectHasAttribute('error', $response);
 		$this->assertObjectHasAttributes($response->error, 'message', 'url', 'status_code');
 
 		return $response;
+	}
+
+	/** @test */
+	public function it_updates_an_existing_book_given_valid_parameters()
+	{
+		$data = [
+			'title'       => 'Updated book Title',
+			'description' => 'Updated book Description',
+			'isbn'        => '0910234910000000000',
+			'author_id'   => Author::first()->id // existing author_id
+		];
+
+		$book = Book::first(); // given an existing $book instance in DB.
+
+		$request = $this->put("api/books/{$book->id}", $data); // when calling update method on this instance.
+
+		$response = json_decode($request->response->getContent())->data; // then
+		$this->assertResponseStatus(200);
+		$this->assertInstanceOf('stdclass', $response);
+		$this->seeJsonStructure([
+			'data' => [
+					'title',
+					'description',
+					'isbn',
+					'author_id',
+					'updated',
+					'released'
+			],
+			'message'
+		]);
+		$this->seeJson([
+			'title'       => $response->title,
+			'description' => $response->description,
+			'isbn'        => $response->isbn,
+			'author_id'   => $response->author_id,
+			'updated'     => $response->updated,
+			'released'    => $response->released,
+			'message'     => "Book ID: 1 successfully updated.!"
+		]);
+		$this->seeInDatabase('books', [
+			'title'       => $response->title,
+			'description' => $response->description,
+			'isbn'        => $response->isbn,
+			'author_id'   => $response->author_id,
+		]);
 	}
 }

@@ -29,7 +29,14 @@ class Book extends Model
 	{
 		return [
 			'title'     => 'required|min:3',
-			'author_id' => 'required|numeric'
+			'author_id' => 'required|numeric|exists:authors,id'
+		];
+	}
+
+	protected static function messages()
+	{
+		return [
+			'author_id.exists' => 'The author_id value does not exist in table authors'
 		];
 	}
 }
