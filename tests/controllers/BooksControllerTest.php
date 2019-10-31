@@ -268,4 +268,20 @@ class BooksControllerTest extends ApiControllerTest
 			'author_id'   => $response->author_id,
 		]);
 	}
+
+	/** @test */
+	public function it_deletes_an_existing_book_given_valid_parameters()
+	{
+		// given an existing book
+		$book = Book::find(10);
+		// when calling the api:
+		$request = $this->delete("api/books/{$book->id}");
+
+		// should see a 200 status code and a json response
+		json_decode($request->response->getContent());
+		$this->assertResponseStatus(200);
+		$this->notSeeInDatabase('books', ['id' => $book->id]);
+		$this->seeJsonStructure(['message']);
+		$this->seeJson(['message' => 'Book ID: 10 successfully deleted!.']);
+	}
 }

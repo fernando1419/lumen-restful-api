@@ -27,6 +27,7 @@ $router->group(['prefix' => '/api'], function () use ($router)
 	$router->get('/books/{book}', 'BooksController@show');
 	$router->post('/books', 'BooksController@store');
 	$router->put('/books/{book}', 'BooksController@update');
+	$router->delete('/books/{book}', 'BooksController@destroy');
 });
 
 // Authentication Routes:

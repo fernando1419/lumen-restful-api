@@ -39,6 +39,8 @@ class BooksController extends ApiController
 			return $this->respondNotFound('Book does not exist.');
 		}
 
+		// $book = $this->findBook($bookId);
+
 		return $this->respond([
 			'data'    => (new BookTransformer())->transform($book),
 			'message' => "Information about Book ID: {$bookId}."
@@ -94,6 +96,38 @@ class BooksController extends ApiController
 		return $this->setStatusCode(200)->respond([
 			'data'    => (new BookTransformer())->transform($book),
 			'message' => "Book ID: {$book->id} successfully updated.!"
+		]);
+	}
+
+	public function findBook($bookId)
+	{
+		$book = Book::find($bookId);
+
+		if ( ! $book) {
+			return $this->respondNotFound('Book does not exist.');
+		}
+
+		return $book;
+	}
+
+	/**
+	 * destroy DELETE('api/books/bookId')
+	 *
+	 * @param mixed $bookId
+	 * @return void
+	 */
+	public function destroy($bookId)
+	{
+		$book = Book::find($bookId);
+
+		if ( ! $book) {
+			return $this->respondNotFound('Book does not exist.');
+		}
+
+		$book->delete();
+
+		return $this->respond([
+			'message' => "Book ID: {$bookId} successfully deleted!."
 		]);
 	}
 }
