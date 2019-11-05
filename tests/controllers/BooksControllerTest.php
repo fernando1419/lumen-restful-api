@@ -14,7 +14,8 @@ class BooksControllerTest extends ApiControllerTest
 	public function it_responds_with_200_code_and_siutable_json_structure_when_there_are_books()
 	{
 		$books = Book::take(10)->get(); // given some books in DB.
-		$this->get('/api/books'); // when call GET request to /api/books
+
+		$this->getJson('/api/books'); // when call GET request to /api/books
 
 		$this->seeStatusCode(200) // then...
 			->seeJsonStructure([
@@ -46,7 +47,7 @@ class BooksControllerTest extends ApiControllerTest
 		Book::truncate(); // given No books in DB.
 		$books = Book::take(10)->get();
 
-		$this->get('/api/books'); // when
+		$this->getJson('/api/books'); // when
 
 		$this->seeStatusCode(200) // then...
 			->seeJsonStructure([
@@ -64,7 +65,7 @@ class BooksControllerTest extends ApiControllerTest
 		$book = Book::first();
 
 		// when...
-		json_decode($this->call('GET', 'api/books/1')->getContent());
+		$this->getJson('api/books/1');
 
 		// then...
 		$this->seeStatusCode(200);
@@ -93,8 +94,7 @@ class BooksControllerTest extends ApiControllerTest
 		$book = Book::first();
 
 		// when....
-		$request  = $this->get('api/books/1');
-		$response = json_decode($request->response->getContent())->data;
+		$response = $this->getJson('api/books/1')->data;
 
 		// then...
 		$this->seeStatusCode(200);
@@ -109,11 +109,11 @@ class BooksControllerTest extends ApiControllerTest
 	/** @test */
 	public function it_404s_if_a_book_is_not_found()
 	{
-		$non_existing_bookId = 'XXX';
-		$request             = $this->get("api/books/{$non_existing_bookId}");
-		json_decode($request->response->getContent());
+		$non_existing_bookId = 'XXX'; // given...
 
-		$this->assertResponseStatus(404);
+		$this->getJson("api/books/{$non_existing_bookId}"); // when...
+
+		$this->assertResponseStatus(404); // then...
 
 		$this->seeJsonStructure([
 			'error' => [
@@ -134,15 +134,14 @@ class BooksControllerTest extends ApiControllerTest
 	{
 		Book::truncate(); // given No books in DB.
 
-		$data = [
+		$bookData = [
 			'title'       => 'New book Title',
 			'description' => 'New book Description',
 			'isbn'        => '0910234910000000000',
 			'author_id'   => Author::find(20)->id // existing author with id=20.
 		];
 
-		$request  = $this->post('api/books', $data); // when calling api...
-		$response = json_decode($request->response->getContent())->data;
+		$response = $this->getJson('/api/books', 'POST', $bookData)->data;
 		// dd($response); // stdclass with all fields declared in the BookTransformer Class.
 
 		$this->assertResponseStatus(201); // then...
@@ -213,9 +212,9 @@ class BooksControllerTest extends ApiControllerTest
 	 */
 	private function getResponseGivenInvalidDataInRequest($data)
 	{
-		$request  = $this->post('api/books', $data, ['Accept' => 'application/json']); // when calling the api without any data..
-		$response = json_decode($request->response->getContent());
-		// dd($response);
+		$response  = $this->getJson('api/books', 'POST', $data, ['Accept' => 'application/json']);
+        // dd($response);
+
 		$this->assertResponseStatus(422); // then..
 		$this->assertInstanceOf('stdClass', $response);
 		$this->assertObjectHasAttribute('error', $response);
@@ -227,7 +226,7 @@ class BooksControllerTest extends ApiControllerTest
 	/** @test */
 	public function it_updates_an_existing_book_given_valid_parameters()
 	{
-		$data = [
+		$bookData = [
 			'title'       => 'Updated book Title',
 			'description' => 'Updated book Description',
 			'isbn'        => '0910234910000000000',
@@ -236,9 +235,9 @@ class BooksControllerTest extends ApiControllerTest
 
 		$book = Book::first(); // given an existing $book instance in DB.
 
-		$request = $this->put("api/books/{$book->id}", $data); // when calling update method on this instance.
+		// when calling update method on this instance.
+		$response = $this->getJson("/api/books/{$book->id}", 'PUT', $bookData)->data;
 
-		$response = json_decode($request->response->getContent())->data; // then
 		$this->assertResponseStatus(200);
 		$this->assertInstanceOf('stdclass', $response);
 		$this->seeJsonStructure([
@@ -274,11 +273,11 @@ class BooksControllerTest extends ApiControllerTest
 	{
 		// given an existing book
 		$book = Book::find(10);
+
 		// when calling the api:
-		$request = $this->delete("api/books/{$book->id}");
+		$this->getJson("api/books/{$book->id}", 'DELETE');
 
 		// should see a 200 status code and a json response
-		json_decode($request->response->getContent());
 		$this->assertResponseStatus(200);
 		$this->notSeeInDatabase('books', ['id' => $book->id]);
 		$this->seeJsonStructure(['message']);

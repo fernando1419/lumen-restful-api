@@ -48,4 +48,17 @@ class ApiControllerTest extends TestCase
 			$this->assertObjectHasAttribute($attribute, $object);
 		}
 	}
+
+	/**
+	 * getJson
+	 *
+	 * @param mixed $uri
+	 * @param mixed $method (GET, PUT, POST, DELETE)
+	 * @param mixed $parameters
+	 * @return void
+	 */
+	protected function getJson($uri, $method = 'GET', $data = [], $headers = [])
+	{
+		return json_decode($this->call($method, $uri, $data, $headers)->getContent());
+	}
 }
