@@ -9,13 +9,17 @@ use App\ApiProject\Transformers\BookTransformer;
 
 class BooksController extends ApiController
 {
+	protected $bookTransformer;
+
 	/**
 	 * __construct
 	 *
+	 * @param BookTransformer $bookTransformer
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(BookTransformer $bookTransformer)
 	{
+		$this->bookTransformer = $bookTransformer;
 		$this->middleware('check-param', ['only' => ['show', 'update', 'destroy']]);
 	}
 
@@ -31,7 +35,7 @@ class BooksController extends ApiController
 
 		return $this->respond([
 			'message' => $message,
-			'data'    => (new BookTransformer())->transformCollection($books->toArray())
+			'data'    => $this->bookTransformer->transformCollection($books->toArray())
 		]);
 	}
 
@@ -50,7 +54,7 @@ class BooksController extends ApiController
 		}
 
 		return $this->respond([
-			'data'    => (new BookTransformer())->transform($book),
+			'data'    => $this->bookTransformer->transform($book),
 			'message' => "Information about Book ID: {$bookId}."
 		]);
 	}
@@ -72,7 +76,7 @@ class BooksController extends ApiController
 		$newBook = Book::create($request->all());
 
 		return $this->setStatusCode(201)->respond([
-			'data'    => (new BookTransformer())->transform($newBook),
+			'data'    => $this->bookTransformer->transform($newBook),
 			'message' => "Book ID: {$newBook->id} successfully created.!"
 		]);
 	}
@@ -102,21 +106,10 @@ class BooksController extends ApiController
 		$book->save();
 
 		return $this->setStatusCode(200)->respond([
-			'data'    => (new BookTransformer())->transform($book),
+			'data'    => $this->bookTransformer->transform($book),
 			'message' => "Book ID: {$book->id} successfully updated.!"
 		]);
 	}
-
-	// public function findBook($bookId)
-	// {
-	// 	$book = Book::find($bookId);
-
-	// 	if ( ! $book) {
-	// 		return $this->respondNotFound('Book does not exist.');
-	// 	}
-
-	// 	return $book;
-	// }
 
 	/**
 	 * destroy DELETE('api/books/bookId')
