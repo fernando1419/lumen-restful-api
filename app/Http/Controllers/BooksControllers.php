@@ -10,6 +10,16 @@ use App\ApiProject\Transformers\BookTransformer;
 class BooksController extends ApiController
 {
 	/**
+	 * __construct
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware('check-param', ['only' => ['show', 'update', 'destroy']]);
+	}
+
+	/**
 	 * Retrieve all books.
 	 *
 	 * @return json response
@@ -38,8 +48,6 @@ class BooksController extends ApiController
 		if ( ! $book) {
 			return $this->respondNotFound('Book does not exist.');
 		}
-
-		// $book = $this->findBook($bookId);
 
 		return $this->respond([
 			'data'    => (new BookTransformer())->transform($book),
@@ -99,16 +107,16 @@ class BooksController extends ApiController
 		]);
 	}
 
-	public function findBook($bookId)
-	{
-		$book = Book::find($bookId);
+	// public function findBook($bookId)
+	// {
+	// 	$book = Book::find($bookId);
 
-		if ( ! $book) {
-			return $this->respondNotFound('Book does not exist.');
-		}
+	// 	if ( ! $book) {
+	// 		return $this->respondNotFound('Book does not exist.');
+	// 	}
 
-		return $book;
-	}
+	// 	return $book;
+	// }
 
 	/**
 	 * destroy DELETE('api/books/bookId')

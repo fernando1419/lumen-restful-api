@@ -14,21 +14,19 @@ class ApiControllerTest extends TestCase
 		$request = $this->get($url_with_invalid_param);
 
 		$request->seeStatusCode(400)
-			->seeJsonStructure($this->getJsonErrorkeys())
-			->assertObjectNotHasAttribute('email', $request);
+				->seeJsonStructure($this->getJsonErrorkeys());
 	}
 
 	/** @test */
 	public function it_responds_with_404_code_and_errors_keys_when_calling_unexisting_resource()
 	{
-		$request = $this->get('api/non-existing-url/22');
+		$request = $this->get('api/non-existing-url/afdasdfafasdf');
 
 		$request->seeStatusCode(404)
-			->seeJsonStructure($this->getJsonErrorkeys())
-			->assertObjectNotHasAttribute('email', $request);
+				->seeJsonStructure($this->getJsonErrorkeys());
 	}
 
-	private function getJsonErrorkeys()
+	protected function getJsonErrorkeys()
 	{
 		return [
 			"error" => [

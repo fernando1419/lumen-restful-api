@@ -6,23 +6,23 @@ use Closure;
 
 class CheckRouteParam
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
-    {
-        $author_param = $request->route('author'); 
-        
-        if ( $author_param && ! is_numeric($author_param) )
-        {
-            $apiController = new \App\Http\Controllers\ApiController();
-            return $apiController->respondBadRequest("Bad request. The parameter '{$author_param}' must be numeric.");
-        }
+	/**
+	 * Handle an incoming request.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Closure  $next
+	 * @return mixed
+	 */
+	public function handle($request, Closure $next)
+	{
+		$route = $request->route(); // route information
+		$param = reset($route[2]); // route parameters are the 3rd item in the route info array
 
-        return $next($request);
-    }
+		if ($param && ! is_numeric($param)) {
+			$apiController = new \App\Http\Controllers\ApiController();
+			return $apiController->respondBadRequest("Bad request. The parameter '{$param}' must be numeric.");
+		}
+
+		return $next($request);
+	}
 }

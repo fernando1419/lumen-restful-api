@@ -106,26 +106,44 @@ class BooksControllerTest extends ApiControllerTest
 		$this->assertEquals($book->author_id, $response->author_id);
 	}
 
-	/** @test */
+	/** @test
+	 * this test is used by the show, update and delete methods (implemented using the 'check-route' middleware)
+	 */
+	public function it_400s_if_a_bookId_parameter_is_not_numeric()
+	{
+		// when calling a GET request at the Book API given a not numeric bookId as parameter...
+		$this->getJson('api/books/13Xa');
+
+		// then...
+		$this->assertResponseStatus(400);
+
+		$this->seeJsonStructure($this->getJsonErrorkeys());
+
+		$this->seeJson([
+			'message'     => "Bad request. The parameter '13Xa' must be numeric.",
+			'status_code' => 400,
+			'url'         => 'http://localhost/api/books/13Xa'
+		]);
+	}
+
+	/** @test
+	 * this test is used by the show, update and delete methods.
+	 */
 	public function it_404s_if_a_book_is_not_found()
 	{
-		$non_existing_bookId = 'XXX'; // given...
+		// given a non-existing NUMERIC bookId... (BECAUSE A NON-NUMERIC PARAMETER IS CONTROLLED BY MIDDLEWARE)
+		$non_existing_bookId = '12312646545664652465554655656546555555555555555500';
 
 		$this->getJson("api/books/{$non_existing_bookId}"); // when...
 
 		$this->assertResponseStatus(404); // then...
 
-		$this->seeJsonStructure([
-			'error' => [
-				'message',
-				'status_code',
-				'url'
-			]
-		]);
+		$this->seeJsonStructure($this->getJsonErrorkeys());
 
 		$this->seeJson([
 			'message'     => 'Book does not exist.',
-			'status_code' => 404
+			'status_code' => 404,
+			'url'         => 'http://localhost/api/books/12312646545664652465554655656546555555555555555500'
 		]);
 	}
 
@@ -213,7 +231,7 @@ class BooksControllerTest extends ApiControllerTest
 	private function getResponseGivenInvalidDataInRequest($data)
 	{
 		$response  = $this->getJson('api/books', 'POST', $data, ['Accept' => 'application/json']);
-        // dd($response);
+		// dd($response);
 
 		$this->assertResponseStatus(422); // then..
 		$this->assertInstanceOf('stdClass', $response);
