@@ -21,6 +21,7 @@ class BooksController extends ApiController
 	{
 		$this->bookTransformer = $bookTransformer;
 		$this->middleware('check-param', ['only' => ['show', 'update', 'destroy']]);
+		$this->middleware('jwt.auth', ['only' => ['store', 'update', 'destroy']]);
 	}
 
 	/**
